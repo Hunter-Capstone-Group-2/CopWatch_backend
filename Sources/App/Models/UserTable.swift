@@ -9,15 +9,15 @@ import Vapor
 import Fluent
 
 final class User: Model {
-    typealias IDValue = <#type#>
     
+    typealias IDValue = String
     
     // Table name
     static let schema = "user"
     
     // Table columns
     @ID(custom: "user_id", generatedBy: .user)
-    var user_id: String?
+    var id: String?
     
     @Field(key: "user_name")
     var user_name: String
