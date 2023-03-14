@@ -8,8 +8,8 @@
 import Vapor
 import Fluent
 
-final class User: Model {
-    
+final class User: Model
+{
     typealias IDValue = String
     
     // Table name
@@ -33,10 +33,10 @@ final class User: Model {
     
     init() { }
     
-    init(id: UUID? = nil, user_id: String, user_name: String,
+    init(user_id: String? = nil, user_name: String,
          location_id: String, pins_created: Int, pins_confirmed: Int )
         {
-            self.user_id = user_id
+            self.id = user_id
             self.user_name = user_name
             self.location_id = location_id
             self.pins_created = pins_created
