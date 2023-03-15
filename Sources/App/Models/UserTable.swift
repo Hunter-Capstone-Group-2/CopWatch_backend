@@ -22,8 +22,8 @@ final class User: Model
     @Field(key: "user_name")
     var user_name: String
 
-    @Field(key: "location_id")
-    var location_id: String
+//    @Field(key: "location_id")
+//    var location_id: String
     
     @OptionalField(key: "pins_created")
     var pins_created : Int?
@@ -38,8 +38,10 @@ final class User: Model
         {
             self.id = user_id
             self.user_name = user_name
-            self.location_id = location_id
+            //self.location_id = location_id
             self.pins_created = pins_created
             self.pins_confirmed = pins_confirmed
         }
+    
 }
+extension User: Content {}
