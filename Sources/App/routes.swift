@@ -9,6 +9,8 @@ func routes(_ app: Application) throws {
     app.get("hello") { req async -> String in
         "Hello, world!"
     }
-
+    
+    // Add /user to routes
+    try app.register(collection: UserController())
     
 }

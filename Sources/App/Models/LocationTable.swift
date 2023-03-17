@@ -1,19 +1,16 @@
 //
-//  UserTable.swift
+//  LocationTable.swift
+//  
 //
-//
-//  Created by Raul Camargo on 3/10/23.
+//  Created by Raul Camargo on 3/17/23.
 //
 
 import Vapor
 import Fluent
 
-final class User: Model, Content
+final class Location: Model, Content
 {
-    typealias IDValue = String
-    
-    // Table name
-    static let schema = "user"
+    public static let schema = "location"
     
     // Table columns
     @ID(custom: "user_id", generatedBy: .user)
@@ -44,4 +41,5 @@ final class User: Model, Content
         }
     
 }
+
 
