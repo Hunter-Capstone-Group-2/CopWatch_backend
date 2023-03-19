@@ -10,34 +10,41 @@ import Fluent
 
 final class Location: Model, Content
 {
-    public static let schema = "location"
+    static let schema = "location"
     
     // Table columns
-    @ID(custom: "user_id", generatedBy: .user)
+    @ID(custom: "location_id", generatedBy: .user)
     var id: String?
     
-    @Field(key: "user_name")
-    var userName: String
-
-//    @Field(key: "location_id")
-//    var locationID: String
+    @Field(key: "latitude")
+    var latitude: Double
     
-    @OptionalField(key: "pins_created")
-    var pinsCreated : Int?
+    @Field(key: "longitude")
+    var longitude: Double
     
-    @OptionalField(key: "pins_confirmed")
-    var pinsConfirmed: Int?
+    @OptionalField(key: "building_number")
+    var buildingNumber: String?
+    
+    @OptionalField(key: "street")
+    var street: String?
+    
+    @OptionalField(key: "description")
+    var description: String?
+    
+    @Children(for: \.$location) // Designates user as a relation
+    var users: [User]
     
     init() { }
     
-    init(id: String? = nil, userName: String,
-         pinsCreated: Int, pinsConfirmed: Int )
+    init(id: String? = nil, lat: Double,long: Double,
+         bldnum: String, street: String, desc: String)
         {
             self.id = id
-            self.userName = userName
-            //self.location_id = location_id
-            self.pinsCreated = pinsCreated
-            self.pinsConfirmed = pinsConfirmed
+            self.latitude = lat
+            self.longitude = long
+            self.buildingNumber = bldnum
+            self.street = street
+            self.description = desc
         }
     
 }

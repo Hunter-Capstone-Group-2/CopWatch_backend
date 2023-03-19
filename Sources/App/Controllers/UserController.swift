@@ -15,15 +15,16 @@ struct UserController: RouteCollection
         user.get(use: index)
         user.post(use: create)
     }
-    func index(req: Request) throws -> EventLoopFuture<[User]>
+    func index(req: Request) async throws -> [User]
     {
-        return User.query(on: req.db).all()
+        try await User.query(on: req.db).all()
     }
     
-    func create(req: Request) throws -> EventLoopFuture<HTTPStatus>
+    func create(req: Request) async throws -> HTTPStatus
     {
         let user = try req.content.decode(User.self)
-        return user.save(on: req.db).transform(to: .ok)
+        try await user.save(on: req.db)
+        return .ok
     }
     
 }

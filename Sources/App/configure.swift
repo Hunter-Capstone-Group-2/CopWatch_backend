@@ -16,7 +16,7 @@ public func configure(_ app: Application) throws {
     ), as: .psql)
     
     // Register migration
-    app.migrations.add(CreateUser())
+    app.migrations.add(CreateLocation())
     
     // Log level
     app.logger.logLevel = .debug

@@ -22,8 +22,8 @@ final class User: Model, Content
     @Field(key: "user_name")
     var userName: String
 
-//    @Field(key: "location_id")
-//    var locationID: String
+    @Parent(key: "location_id")
+    var location: Location
     
     @OptionalField(key: "pins_created")
     var pinsCreated : Int?
@@ -33,12 +33,12 @@ final class User: Model, Content
     
     init() { }
     
-    init(id: String? = nil, userName: String,
+    init(id: String? = nil, userName: String, loc: Location.IDValue,
          pinsCreated: Int, pinsConfirmed: Int )
         {
             self.id = id
             self.userName = userName
-            //self.location_id = location_id
+            self.$location.id = loc
             self.pinsCreated = pinsCreated
             self.pinsConfirmed = pinsConfirmed
         }
