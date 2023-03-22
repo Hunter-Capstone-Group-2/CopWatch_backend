@@ -15,6 +15,7 @@ struct UserController: RouteCollection
         user.get(use: index)
         user.post(use: create)
     }
+    
     func index(req: Request) async throws -> [User]
     {
         try await User.query(on: req.db).all()
@@ -22,7 +23,15 @@ struct UserController: RouteCollection
     
     func create(req: Request) async throws -> HTTPStatus
     {
-        let user = try req.content.decode(User.self)
+        let newUser = try req.content.decode(UserTablePatch.self)
+        let user = User(
+            id: newUser.user_id,
+            userName: newUser.user_name,
+            loc: newUser.location_id,
+            pinsCreated: newUser.pinsCreated ?? 0,
+            pinsConfirmed: newUser.pinsConfirmed ?? 0
+        )
+
         try await user.save(on: req.db)
         return .ok
     }
