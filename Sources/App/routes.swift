@@ -16,5 +16,7 @@ func routes(_ app: Application) throws {
     
     // Add /user to routes
     try app.register(collection: UserController())
+    // Add /location to routes
+    try app.register(collection: LocationController())
     
 }
