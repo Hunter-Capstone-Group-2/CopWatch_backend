@@ -16,7 +16,7 @@ public func configure(_ app: Application) throws {
     ), as: .psql)
     
     // Register migration
-    app.migrations.add(CreateLocation())
+    app.migrations.add(CreateLocation(), CreatePinLocation())
     
     // Log level
     app.logger.logLevel = .debug

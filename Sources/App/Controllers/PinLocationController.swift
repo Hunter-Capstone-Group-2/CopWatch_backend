@@ -1,31 +1,31 @@
 //
-//  LocationController.swift
+//  PinLocationController.swift
+//  
+//  Pin location routing logic
 //
-//  User location routing logic
-//
-//  Created by Raul Camargo on 3/25/23.
+//  Created by Raul Camargo on 3/27/23.
 //
 
 import Fluent
 import Vapor
 
-struct LocationController: RouteCollection
+struct PinLocationController: RouteCollection
 {
     func boot(routes: Vapor.RoutesBuilder) throws {
-        let location = routes.grouped("location")
+        let location = routes.grouped("pin_location")
         location.get(use: index)
         location.post(use: create)
     }
     
-    func index(req: Request) async throws -> [Location]
+    func index(req: Request) async throws -> [PinLocation]
     {
-        try await Location.query(on: req.db).all()
+        try await PinLocation.query(on: req.db).all()
     }
     
     func create(req: Request) async throws -> HTTPStatus
     {
         let newLoc = try req.content.decode(LocationTablePatch.self)
-        let locale = Location(
+        let locale = PinLocation(
             id: newLoc.location_id,
             lat: newLoc.latitude,
             long: newLoc.longitude,
@@ -39,4 +39,3 @@ struct LocationController: RouteCollection
     }
     
 }
-

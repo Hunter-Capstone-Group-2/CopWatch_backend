@@ -8,7 +8,7 @@
 import Vapor
 import Fluent
 
-final class PinLocationTable: Model, Content
+final class PinLocation: Model, Content
 {
     static let schema = "pin_location"
     

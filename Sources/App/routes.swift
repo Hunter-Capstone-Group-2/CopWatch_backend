@@ -18,5 +18,6 @@ func routes(_ app: Application) throws {
     try app.register(collection: UserController())
     // Add /location to routes
     try app.register(collection: LocationController())
-    
+    // Add /pin_location to routes
+    try app.register(collection: PinLocationController())
 }

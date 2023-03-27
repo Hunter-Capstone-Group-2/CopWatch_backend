@@ -1,6 +1,7 @@
 //
 //  LocationTablePatch.swift
-//  
+//
+//  DTO for both Location and PinLocation
 //
 //  Created by Raul Camargo on 3/25/23.
 //
@@ -11,7 +12,6 @@ import Fluent
 struct LocationTablePatch: Decodable
 {
     var location_id: String?
-    var user_name: String
     var latitude: Double
     var longitude : Double
     var building_number: String?
