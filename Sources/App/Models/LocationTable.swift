@@ -10,7 +10,7 @@ import Fluent
 
 final class Location: Model, Content
 {
-    static let schema = "pin_location"
+    static let schema = "location"
     
     // Table columns
     @ID(custom: "location_id", generatedBy: .user)
