@@ -1,19 +1,19 @@
 //
-//  UserLocationTable.swift
+//  PinLocationTable.swift
 //  
 //
-//  Created by Raul Camargo on 3/17/23.
+//  Created by Raul Camargo on 3/27/23.
 //
 
 import Vapor
 import Fluent
 
-final class Location: Model, Content
+final class PinLocation: Model, Content
 {
-    static let schema = "location"
+    static let schema = "pin_location"
     
     // Table columns
-    @ID(custom: "location_id", generatedBy: .user)
+    @ID(custom: "pin_location_id", generatedBy: .user)
     var id: String?
     
     @Field(key: "latitude")
@@ -31,8 +31,8 @@ final class Location: Model, Content
     @OptionalField(key: "description")
     var description: String?
     
-    @Children(for: \.$location) // Designates user as a relation
-    var users: [User]
+//    @Children(for: \.$location) // Designates user as a relation
+//    var users: [User]
     
     init() { }
     
@@ -48,5 +48,6 @@ final class Location: Model, Content
         }
     
 }
+
 
 

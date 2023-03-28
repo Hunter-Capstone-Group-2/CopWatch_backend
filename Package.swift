@@ -27,7 +27,10 @@ let package = Package(
                 .unsafeFlags(["-cross-module-optimization"], .when(configuration: .release))
             ]
         ),
-        .executableTarget(name: "Run", dependencies: [.target(name: "App")]),
+        .executableTarget(name: "Run",
+                          dependencies: [.target(name: "App")],
+                          linkerSettings: [.unsafeFlags(["-Xlinker", "--no-keep-files-mapped", "-Xlinker", "--no-map-whole-files", "-Xlinker", "--no-mmap-output-file", "-Xlinker", "--no-keep-memory"], .when(platforms: [.linux]))]
+                         ),
         .testTarget(name: "AppTests", dependencies: [
             .target(name: "App"),
             .product(name: "XCTVapor", package: "vapor"),
