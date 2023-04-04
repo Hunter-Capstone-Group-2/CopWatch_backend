@@ -11,7 +11,7 @@ struct CreatePin: AsyncMigration {
     func prepare(on database: Database) async throws {
         // Create pin table
         try await database.schema("pin")
-            .field("id", .uuid, .identifier(auto: true))
+            .id()
             .field("user_id", .string, .required, .references("user", "id", onDelete: .setNull))
             .field("time_created", .date)
             .field("time_confirmed", .date)
