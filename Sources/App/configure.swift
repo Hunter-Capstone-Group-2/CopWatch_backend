@@ -19,6 +19,7 @@ public func configure(_ app: Application) throws {
     app.migrations.add(EnablePostGISMigration())
     app.migrations.add(CreateUser())
     app.migrations.add(CreatePin())
+    app.migrations.add(CreateComment())
     
     try app.autoMigrate().wait()
 

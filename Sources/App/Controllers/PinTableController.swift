@@ -28,8 +28,6 @@ struct PinTableController: RouteCollection
         let geoPT = GeographicPoint2D(longitude: newPin.longitude, latitude: newPin.latitude)
         let pin = Pin(
             userID: newPin.userID,
-            //timeCreated: newPin.timeCreated,
-            //timeConfirmed: newPin.timeConfirmed,
             confirmed: newPin.confirmed,
             pinLocation: geoPT)
         try await pin.save(on: req.db)

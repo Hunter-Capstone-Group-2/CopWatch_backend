@@ -12,8 +12,6 @@ import FluentPostGIS
 struct PinTablePatch: Content
 {
     var userID: String
-   //var timeCreated: Date
-    //var timeConfirmed: Date
     var confirmed: Bool
     var longitude: Double
     var latitude: Double

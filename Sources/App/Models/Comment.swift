@@ -39,15 +39,12 @@ final class Comment: Model, Content
     
     init() {}
     
-    init(id: UUID? = nil, pinID: UUID, userID: String, timeCreated: Date, comment: String, like: Int, dislike: Int)
+    init(id: UUID? = nil, pinID: UUID, userID: String, comment: String)
     {
         self.id = id
         self.$pinID.id = pinID
         self.userID = userID
-        self.created = timeCreated
         self.comment = comment
-        self.like = like
-        self.dislike = dislike
     }
     
     

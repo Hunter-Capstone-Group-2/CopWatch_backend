@@ -43,8 +43,6 @@ final class Pin: Model, Content
     {
         self.id = id
         self.$userID.id = userID
-        //self.timeCreateed = timeCreateed
-        //self.timeConfirmed = timeConfirmed
         self.confirmed = confirmed ?? false
         self.pinLocation = pinLocation
     }

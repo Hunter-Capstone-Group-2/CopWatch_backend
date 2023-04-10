@@ -23,7 +23,11 @@ struct CommentTableController: RouteCollection
     
     func create(req: Request) async throws -> HTTPStatus
     {
-        let comment = try req.content.decode(Comment.self)
+        let newComment = try req.content.decode(CommentTablePatch.self)
+        let comment = Comment(
+            pinID: newComment.pinID,
+            userID: newComment.userID,
+            comment: newComment.comment)
         try await comment.save(on: req.db)
         return .ok
     }

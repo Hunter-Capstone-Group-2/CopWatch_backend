@@ -14,7 +14,7 @@ struct CreateComment: AsyncMigration
         try await database.schema("comment")
             .id()
             .field("pin_id", .uuid, .required, .references("pin", "id", onDelete: .cascade))
-            .field("user_id", .string, .references("user", "id", onDelete: .setNull))
+            .field("user_id", .string, .references("user", "user_id", onDelete: .setNull))
             .field("time_created", .date)
             .field("comment", .string)
             .field("like", .int)
