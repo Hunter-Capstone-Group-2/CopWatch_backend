@@ -12,4 +12,5 @@ func routes(_ app: Application) throws {
 
     try app.register(collection: UserTableController())
     try app.register(collection: PinTableController())
+    try app.register(collection: CommentTableController())
 }

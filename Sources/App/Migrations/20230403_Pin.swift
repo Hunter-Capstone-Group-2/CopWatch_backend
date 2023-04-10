@@ -7,12 +7,13 @@
 
 import Fluent
 
-struct CreatePin: AsyncMigration {
+struct CreatePin: AsyncMigration
+{
     func prepare(on database: Database) async throws {
         // Create pin table
         try await database.schema("pin")
             .id()
-            .field("user_id", .string, .required, .references("user", "id", onDelete: .setNull))
+            .field("user_id", .string, .required, .references("user", "user_id", onDelete: .setNull))
             .field("time_created", .date)
             .field("time_confirmed", .date)
             .field("confirmed", .bool)

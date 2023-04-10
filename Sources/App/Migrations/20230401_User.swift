@@ -5,10 +5,10 @@ struct CreateUser: AsyncMigration {
     {
         // Create user table
         try await database.schema("user")
-            .field("user_id", .string, .identifier(auto: true))
+            .field("user_id", .string, .identifier(auto: false))
             .field("user_name", .string, .required)
             .field("location", .geographicPoint2D, .required)
-            .unique(on: "user_name")
+            .unique(on: "user_name", name: "no_duplicate_names")
             .create()
     }
 

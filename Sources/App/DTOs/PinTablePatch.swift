@@ -1,0 +1,20 @@
+//
+//  PinTablePatch.swift
+//  
+//
+//  Created by Raul Camargo on 4/10/23.
+//
+
+import Vapor
+import Fluent
+import FluentPostGIS
+
+struct PinTablePatch: Content
+{
+    var userID: String
+   //var timeCreated: Date
+    //var timeConfirmed: Date
+    var confirmed: Bool
+    var longitude: Double
+    var latitude: Double
+}

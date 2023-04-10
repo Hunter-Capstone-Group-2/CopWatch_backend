@@ -21,9 +21,34 @@ final class Comment: Model, Content
     
     @Parent(key: "pin_id")
     var pinID: Pin
+    // User relation will be foreign key.
+    @Field(key: "user_id")
+    var userID: String
     
-    @
+    @Timestamp(key: "time_created", on: .create)
+    var created: Date?
     
+    @Field(key: "comment")
+    var comment: String
+    
+    @OptionalField(key: "like")
+    var like: Int?
+    
+    @OptionalField(key: "dislike")
+    var dislike: Int?
+    
+    init() {}
+    
+    init(id: UUID? = nil, pinID: UUID, userID: String, timeCreated: Date, comment: String, like: Int, dislike: Int)
+    {
+        self.id = id
+        self.$pinID.id = pinID
+        self.userID = userID
+        self.created = timeCreated
+        self.comment = comment
+        self.like = like
+        self.dislike = dislike
+    }
     
     
 }

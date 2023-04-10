@@ -7,6 +7,7 @@
 
 import Fluent
 import Vapor
+import FluentPostGIS
 
 struct PinTableController: RouteCollection
 {
@@ -23,7 +24,14 @@ struct PinTableController: RouteCollection
     
     func create(req: Request) async throws -> HTTPStatus
     {
-        let pin = try req.content.decode(Pin.self)
+        let newPin = try req.content.decode(PinTablePatch.self)
+        let geoPT = GeographicPoint2D(longitude: newPin.longitude, latitude: newPin.latitude)
+        let pin = Pin(
+            userID: newPin.userID,
+            //timeCreated: newPin.timeCreated,
+            //timeConfirmed: newPin.timeConfirmed,
+            confirmed: newPin.confirmed,
+            pinLocation: geoPT)
         try await pin.save(on: req.db)
         return .ok
     }

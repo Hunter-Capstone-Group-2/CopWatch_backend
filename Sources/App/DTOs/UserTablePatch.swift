@@ -9,10 +9,10 @@ import Vapor
 import Fluent
 import FluentPostGIS
 
-struct UserTablePatch: Decodable
+struct UserTablePatch: Content
 {
-    var user_id: String?
     var user_name: String
-    var user_location: GeographicPoint2D
+    var longitude: Double
+    var latitude: Double
 }
 

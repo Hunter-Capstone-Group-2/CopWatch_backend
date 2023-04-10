@@ -17,7 +17,7 @@ final class User: Model, Content
     static let schema = "user"
     
     // Table columns
-    @ID(custom: "user_id", generatedBy: .random)
+    @ID(custom: "user_id", generatedBy: .user)
     var id: String?
     
     @Field(key: "user_name")
@@ -26,7 +26,7 @@ final class User: Model, Content
     @Field(key: "location")
     var location: GeographicPoint2D
     
-    @Children(for: \.$userID)
+    @Children(for: \.$userID) // Sets relation to pin table.
     var pins: [Pin]
     
     init() {}

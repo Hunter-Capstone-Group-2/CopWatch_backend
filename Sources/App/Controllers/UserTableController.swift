@@ -1,5 +1,6 @@
 import Fluent
 import Vapor
+import FluentPostGIS
 
 struct UserTableController: RouteCollection
 {
@@ -16,12 +17,19 @@ struct UserTableController: RouteCollection
     
     func create(req: Request) async throws -> HTTPStatus
     {
-        let newUser = try req.content.decode(UserTablePatch.self)
-        let user = User(
-            name: newUser.user_name,
-            location: newUser.user_location)
+        // Generate random id with uuid converted to base64 string
+        let uuid = UUID()
+        let idString = withUnsafeBytes(of: uuid.uuid) {Data($0)}
+        let encodedID = idString.base64EncodedString()
         
-        try await user.save(on: req.db)
-        return .ok
+        let newUser = try req.content.decode(UserTablePatch.self)
+        let geoPt = GeographicPoint2D(longitude: newUser.longitude, latitude: newUser.latitude)
+        let user = User(
+            id: encodedID,
+            name: newUser.user_name,
+            location: geoPt)
+            
+            try await user.save(on: req.db)
+            return .ok
     }
 }
