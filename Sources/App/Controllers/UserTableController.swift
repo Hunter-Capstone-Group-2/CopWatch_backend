@@ -8,6 +8,7 @@ struct UserTableController: RouteCollection
         let user = routes.grouped("user")
         user.get(use: index)
         user.post(use: create)
+        user.delete(":userID", use: delete)
     }
     
     func index(req: Request) async throws -> [User]
@@ -15,7 +16,7 @@ struct UserTableController: RouteCollection
         try await User.query(on: req.db).all()
     }
     
-    func create(req: Request) async throws -> HTTPStatus
+    func create(req: Request) async throws -> String
     {
         // Generate random id with uuid converted to base64 string
         let uuid = UUID()
@@ -30,6 +31,23 @@ struct UserTableController: RouteCollection
             location: geoPt)
             
             try await user.save(on: req.db)
-            return .ok
+        return user.id ?? "Error. UserID not created."
+    }
+    
+    func delete(req: Request) async throws -> HTTPStatus
+    {
+        guard let id = req.parameters.get("userID", as: String.self)
+        else
+        {
+            throw Abort(.badRequest, reason: "Invalid parameter.")
+        }
+        let user = try await User.find(id, on: req.db)
+           guard let existingUser = user
+        else
+        {
+               throw Abort(.notFound)
+        }
+           try await existingUser.delete(on: req.db)
+           return .noContent
     }
 }
