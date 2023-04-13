@@ -28,6 +28,15 @@ struct UserTableController: RouteCollection
         
         let newUser = try req.content.decode(UserTablePatch.self)
         let geoPt = GeographicPoint2D(longitude: newUser.longitude, latitude: newUser.latitude)
+        
+        // Check if username exists and return error if so.
+        let nameTaken = try await User.nameInUse(newUser.user_name, on: req.db)
+        if nameTaken
+        {
+            throw Abort(.conflict, reason: "User name is already in use")
+        }
+        
+        
         let user = User(
             id: encodedID,
             name: newUser.user_name,
@@ -48,6 +57,13 @@ struct UserTableController: RouteCollection
             throw Abort(.notFound)
         }
         
+        // Check if username exists and return error if so.
+        let nameTaken = try await User.nameInUse(user.user_name, on: req.db)
+        if nameTaken
+        {
+            throw Abort(.conflict, reason: "User name is already in use")
+        }
+        
         let geoPt = GeographicPoint2D(longitude: user.longitude, latitude: user.latitude)
         dbUserEntry.userName = user.user_name
         dbUserEntry.location = geoPt
@@ -60,7 +76,7 @@ struct UserTableController: RouteCollection
         guard let id = req.parameters.get("userID", as: String.self)
         else
         {
-            throw Abort(.badRequest, reason: "Invalid parameter.")
+            throw Abort(.badRequest, reason: "Invalid parameter type.")
         }
         guard let user = try await User.find(id, on: req.db)
         else
