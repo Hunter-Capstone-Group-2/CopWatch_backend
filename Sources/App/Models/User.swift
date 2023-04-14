@@ -11,6 +11,14 @@ import FluentPostGIS
 
 final class User: Model, Content
 {
+    // Check if username exists
+    static func nameInUse(_ name: String, on database: Database) async throws -> Bool
+    {
+        return try await (User.query(on: database)
+                .filter(\.$userName == name)
+                .first() != nil)
+    }
+    
     typealias IDValue = String
     
     // Table name
