@@ -16,3 +16,14 @@ struct PinTablePatch: Content
     var longitude: Double
     var latitude: Double
 }
+
+struct PinReturn: Content
+{
+    var id: UUID
+    var userID: String
+    var confirmed: Bool
+    var longitude: Double
+    var latitude: Double
+    var time_created: Date
+    var time_confirmed: Date
+}

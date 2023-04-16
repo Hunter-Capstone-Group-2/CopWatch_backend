@@ -19,13 +19,26 @@ struct PinTableController: RouteCollection
     }
     
     // Returns all pins in db. BaseURL/pin
-    func index(req: Request) async throws -> [Pin]
+    func index(req: Request) async throws -> [PinReturn]
     {
-        try await Pin.query(on: req.db).all()
+        let pins = try await Pin.query(on: req.db).all()
+        let response = pins.map
+        {
+            pin in
+                    return PinReturn(
+                        id: pin.id!,
+                        userID: pin.$userID.id,
+                        confirmed: pin.confirmed,
+                        longitude: pin.pinLocation.longitude,
+                        latitude: pin.pinLocation.latitude,
+                        time_created: pin.timeCreateed!,
+                        time_confirmed: pin.timeConfirmed!)
+        }
+        return response
     }
     
     // Returns all pins within distance specified. BaseURL/pin/userID/distance
-    func pinsAroundMe(req: Request) async throws -> [Pin]
+    func pinsAroundMe(req: Request) async throws -> [PinReturn]
     {
         let radius = req.parameters.get("distance", as: Double.self) ?? 1000
         
@@ -33,9 +46,22 @@ struct PinTableController: RouteCollection
         let user = try await User.find(identifier, on: req.db)
         let userLoc = user!.location
             
-        return try await Pin.query(on: req.db)
+        let pins =  try await Pin.query(on: req.db)
                 .filterGeographyDistanceWithin(\.$pinLocation, userLoc, radius)
                 .all()
+        let response = pins.map
+        {
+            pin in
+                    return PinReturn(
+                        id: pin.id!,
+                        userID: pin.$userID.id,
+                        confirmed: pin.confirmed,
+                        longitude: pin.pinLocation.longitude,
+                        latitude: pin.pinLocation.latitude,
+                        time_created: pin.timeCreateed!,
+                        time_confirmed: pin.timeConfirmed!)
+        }
+        return response
     }
     
     // Creates pin. BaseURL/pin
