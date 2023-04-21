@@ -16,9 +16,10 @@ struct PinTableController: RouteCollection
         pin.get(use: index)
         pin.get(":userID", ":distance", use: pinsAroundMe)
         pin.post(use: create)
+        pin.put(":id", use: update)
     }
     
-    // Returns all pins in db. BaseURL/pin
+    // GET // Returns all pins in db. BaseURL/pin
     func index(req: Request) async throws -> [PinReturn]
     {
         let pins = try await Pin.query(on: req.db).all()
@@ -37,12 +38,12 @@ struct PinTableController: RouteCollection
         return response
     }
     
-    // Returns all pins within distance specified. BaseURL/pin/userID/distance
+    // GET // Returns all pins within distance specified. BaseURL/pin/userID/distance
     func pinsAroundMe(req: Request) async throws -> [PinReturn]
     {
+        let identifier = req.parameters.get("userID")!
         let radius = req.parameters.get("distance", as: Double.self) ?? 1000
         
-        let identifier = req.parameters.get("userID")!
         let user = try await User.find(identifier, on: req.db)
         let userLoc = user!.location
             
@@ -64,7 +65,7 @@ struct PinTableController: RouteCollection
         return response
     }
     
-    // Creates pin. BaseURL/pin
+    // POST // Creates pin. BaseURL/pin
     func create(req: Request) async throws -> HTTPStatus
     {
         let newPin = try req.content.decode(PinTablePatch.self)
@@ -76,4 +77,26 @@ struct PinTableController: RouteCollection
         try await pin.save(on: req.db)
         return .ok
     }
+    
+    // PUT // Updates pin confirmation status. BaseURL/pin/id
+    func update(req: Request) async throws -> HTTPStatus
+    {
+        let pin = try req.content.decode(PinTablePatch.self)
+        if let identifier = req.parameters.get("id"),
+        let pinID = UUID(uuidString: identifier)
+        {
+            // Find pin in db
+            guard let dbPinEntry = try await Pin.find(pinID, on: req.db)
+            else
+            {
+                throw Abort(.notFound)
+            }
+            // Update confirmed status and time
+            dbPinEntry.confirmed = pin.confirmed
+            try await dbPinEntry.update(on: req.db)
+        }
+        
+        return .ok
+        
+    } // End update
 }
