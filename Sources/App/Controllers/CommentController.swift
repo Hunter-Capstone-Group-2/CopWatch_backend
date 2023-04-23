@@ -16,7 +16,7 @@ struct CommentTableController: RouteCollection
         comment.post(use: create)
         comment.get("byUser", ":userID", use: getUserPosts)
         comment.get("byPin", ":pinID", use: getPinPosts)
-        comment.put(":id", use: editComment)
+        comment.put(use: editComment)
         comment.delete(":id", use: delete)
     }
    
@@ -58,12 +58,10 @@ struct CommentTableController: RouteCollection
                 .all()
     }
     
-    // PUT // Edits existing comment. BaseURL/comment/{id}
+    // PUT // Edits existing comment. BaseURL/comment/
     func editComment(req: Request) async throws -> HTTPStatus
     {
         let newComment = try req.content.decode(CommentTablePatch.self)
-        
-        let identifier = req.parameters.get("id", as: UUID.self)!
         
         guard let dbCommentEntry = try await Comment.find(newComment.id, on: req.db)
         else
