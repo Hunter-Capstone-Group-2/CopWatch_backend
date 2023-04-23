@@ -16,6 +16,7 @@ struct CommentTableController: RouteCollection
         comment.post(use: create)
         comment.get("byUser", ":userID", use: getUserPosts)
         comment.get("byPin", ":pinID", use: getPinPosts)
+        comment.put(":id", use: editComment)
     }
    
     // GET // Returns ALL comments in table. BaseURL/comment
@@ -36,7 +37,7 @@ struct CommentTableController: RouteCollection
         return .ok
     }
     
-    // GET // Returns all comments made by a specific user. BaseURL/comment/byUser/{userID}
+    // GET // Returns comments made by a specific user. BaseURL/comment/byUser/{userID}
     func getUserPosts(req: Request) async throws -> [Comment]
     {
         let identifier = req.parameters.get("userID")!
@@ -46,7 +47,7 @@ struct CommentTableController: RouteCollection
                 .all()
     }
     
-    // GET // Returns all comments for a specific pin. BaseURL/comment/byPin/{pinID}
+    // GET // Returns comments for a specific pin. BaseURL/comment/byPin/{pinID}
     func getPinPosts(req: Request) async throws -> [Comment]
     {
         let identifier = req.parameters.get("pinID", as: UUID.self)!
@@ -54,6 +55,25 @@ struct CommentTableController: RouteCollection
         return try await Comment.query(on: req.db)
                 .filter(\.$pinID.$id == identifier)
                 .all()
+    }
+    
+    // PUT // Edits existing comment. BaseURL/comment/{id}
+    func editComment(req: Request) async throws -> HTTPStatus
+    {
+        let newComment = try req.content.decode(CommentTablePatch.self)
+        
+        let identifier = req.parameters.get("id", as: UUID.self)!
+        
+        guard let dbCommentEntry = try await Comment.find(newComment.id, on: req.db)
+        else
+        {
+            throw Abort(.notFound)
+        }
+        
+        dbCommentEntry.comment = newComment.comment
+        try await dbCommentEntry.update(on: req.db)
+        
+        return .ok
     }
     
 }
