@@ -14,4 +14,6 @@ struct CommentTablePatch: Content
     var userID: String
     var comment: String
     var id: UUID
+    var like: Int
+    var dislike: Int
 }

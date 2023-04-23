@@ -17,6 +17,7 @@ struct CommentTableController: RouteCollection
         comment.get("byUser", ":userID", use: getUserPosts)
         comment.get("byPin", ":pinID", use: getPinPosts)
         comment.put(":id", use: editComment)
+        comment.delete(":id", use: delete)
     }
    
     // GET // Returns ALL comments in table. BaseURL/comment
@@ -71,8 +72,28 @@ struct CommentTableController: RouteCollection
         }
         
         dbCommentEntry.comment = newComment.comment
+        dbCommentEntry.like = newComment.like
+        dbCommentEntry.dislike = newComment.dislike
+        
         try await dbCommentEntry.update(on: req.db)
         
+        return .ok
+    }
+    
+    // DELETE // Deletes comment based on comment id. BaseURL/comment/{id}
+    func delete(req: Request) async throws -> HTTPStatus
+    {
+        guard let id = req.parameters.get("id", as: UUID.self)
+        else
+        {
+            throw Abort(.badRequest, reason: "Invalid parameter type.")
+        }
+        guard let comment = try await Comment.find(id, on: req.db)
+        else
+        {
+               throw Abort(.notFound)
+        }
+        try await comment.delete(on: req.db)
         return .ok
     }
     
