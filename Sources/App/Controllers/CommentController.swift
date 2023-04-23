@@ -14,7 +14,8 @@ struct CommentTableController: RouteCollection
         let comment = routes.grouped("comment")
         comment.get(use: index)
         comment.post(use: create)
-        comment.get(":userID", use: getUserPosts)
+        comment.get("byUser", ":userID", use: getUserPosts)
+        comment.get("byPin", ":pinID", use: getPinPosts)
     }
    
     // GET // Returns ALL comments in table. BaseURL/comment
@@ -35,13 +36,23 @@ struct CommentTableController: RouteCollection
         return .ok
     }
     
-    // GET // Returns specific user comments. BaseURL/comment/userID
+    // GET // Returns all comments made by a specific user. BaseURL/comment/byUser/{userID}
     func getUserPosts(req: Request) async throws -> [Comment]
     {
         let identifier = req.parameters.get("userID")!
         
         return try await Comment.query(on: req.db)
                 .filter(\.$userID == identifier)
+                .all()
+    }
+    
+    // GET // Returns all comments for a specific pin. BaseURL/comment/byPin/{pinID}
+    func getPinPosts(req: Request) async throws -> [Comment]
+    {
+        let identifier = req.parameters.get("pinID", as: UUID.self)!
+        
+        return try await Comment.query(on: req.db)
+                .filter(\.$pinID.$id == identifier)
                 .all()
     }
     

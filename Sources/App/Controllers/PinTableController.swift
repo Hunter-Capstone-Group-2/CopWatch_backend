@@ -38,7 +38,7 @@ struct PinTableController: RouteCollection
         return response
     }
     
-    // GET // Returns all pins within distance specified. BaseURL/pin/userID/distance
+    // GET // Returns all pins within distance specified. BaseURL/pin/{userID}/{distance}
     func pinsAroundMe(req: Request) async throws -> [PinReturn]
     {
         let identifier = req.parameters.get("userID")!
@@ -78,7 +78,7 @@ struct PinTableController: RouteCollection
         return .ok
     }
     
-    // PUT // Updates pin confirmation status. BaseURL/pin/id
+    // PUT // Updates pin confirmation status. BaseURL/pin/{id}
     func update(req: Request) async throws -> HTTPStatus
     {
         let pin = try req.content.decode(PinTablePatch.self)
