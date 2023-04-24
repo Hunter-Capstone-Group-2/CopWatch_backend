@@ -12,13 +12,13 @@ struct UserTableController: RouteCollection
         user.delete(":userID", use: delete)
     }
     
-    // GET request /user. Returns all users, probably never going to use.
+    // GET // Returns all users, probably never going to use. BaseURL/user
     func index(req: Request) async throws -> [User]
     {
         try await User.query(on: req.db).all()
     }
     
-    //  POST request /user. Creates new user and returns userID.
+    // POST // Creates new user and returns userID. BaseURL/user
     func create(req: Request) async throws -> String
     {
         // Generate random id with uuid converted to base64 string
@@ -46,7 +46,7 @@ struct UserTableController: RouteCollection
         return user.id ?? "Error. UserID not created."
     }
     
-    // PUT request /user. Updates user data (name or location).
+    // PUT // Updates user data (name or location). BaseURL/user
     func update(req: Request) async throws -> HTTPStatus
     {
         let user = try req.content.decode(UserTablePatch.self)
@@ -71,6 +71,7 @@ struct UserTableController: RouteCollection
         return .ok
     }
     
+    // DELETE // Deletes user based on userID. BaseURL/user/userID
     func delete(req: Request) async throws -> HTTPStatus
     {
         guard let id = req.parameters.get("userID", as: String.self)
