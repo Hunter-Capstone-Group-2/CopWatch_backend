@@ -15,4 +15,4 @@ jobs:
           version: 0.0.521
       - run: flyctl deploy --remote-only
         env:
-          FLY_API_TOKEN: ${{ secrets.fo1_O5CYA7TsaCYE0aAkIQWpBQiLxzEysIT4D6gEWoWuUVw }}
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
