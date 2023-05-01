@@ -2,6 +2,7 @@ import Fluent
 import FluentPostGIS
 import FluentPostgresDriver
 import Vapor
+import JWT
 
 // configures your application
 public func configure(_ app: Application) throws {
@@ -16,6 +17,10 @@ public func configure(_ app: Application) throws {
         database: Environment.get("DATABASE_NAME") ?? "vapor_database"
     ), as: .psql)
 
+    // Add HMAC with SHA-256 signer.
+    //app.jwt.signers.use(.hs256(key: "secret"))
+    
+    // Migrations modifying db
     app.migrations.add(EnablePostGISMigration())
     app.migrations.add(CreateUser())
     app.migrations.add(CreatePin())

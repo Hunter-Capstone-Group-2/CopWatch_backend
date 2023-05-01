@@ -7,7 +7,6 @@
 
 import Vapor
 import Fluent
-import FluentPostGIS
 
 struct PinTablePatch: Content
 {
