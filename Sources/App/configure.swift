@@ -21,6 +21,7 @@ public func configure(_ app: Application) throws {
     app.migrations.add(CreatePin())
     app.migrations.add(CreateComment())
     app.migrations.add(ChangeDateToDatetime())
+    app.migrations.add(AddWhatWhatDetailWhatLocation())
     
     try app.autoMigrate().wait()
 

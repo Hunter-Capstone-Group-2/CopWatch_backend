@@ -37,13 +37,28 @@ final class Pin: Model, Content
     @Children(for: \.$pinID)
     var comments: [Comment]
     
+    // Added 20230503 migration
+    
+    @Field(key: "report")
+    var report: String
+    
+    @Field(key: "report_detail")
+    var reportDetail: String
+    
+    @Field(key: "report_location")
+    var reportLocation: String
+    
     init() {}
     
-    init(id: UUID? = nil, userID: String, confirmed: Bool?, pinLocation: GeographicPoint2D)
+    init(id: UUID? = nil, userID: String, confirmed: Bool?, pinLocation: GeographicPoint2D, report: String, reportDetail: String, reportLocation: String)
     {
         self.id = id
         self.$userID.id = userID
         self.confirmed = confirmed ?? false
         self.pinLocation = pinLocation
+        // Added 20230503 migration
+        self.report = report
+        self.reportDetail = reportDetail
+        self.reportLocation = reportLocation
     }
 }

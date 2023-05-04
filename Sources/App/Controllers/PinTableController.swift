@@ -33,7 +33,11 @@ struct PinTableController: RouteCollection
                         longitude: pin.pinLocation.longitude,
                         latitude: pin.pinLocation.latitude,
                         time_created: pin.timeCreateed!,
-                        time_confirmed: pin.timeConfirmed!)
+                        time_confirmed: pin.timeConfirmed!,
+                        // Added 20230503 migration
+                        report: pin.report,
+                        report_detail: pin.reportDetail,
+                        report_location: pin.reportLocation)
         }
         return response
     }
@@ -60,7 +64,11 @@ struct PinTableController: RouteCollection
                         longitude: pin.pinLocation.longitude,
                         latitude: pin.pinLocation.latitude,
                         time_created: pin.timeCreateed!,
-                        time_confirmed: pin.timeConfirmed!)
+                        time_confirmed: pin.timeConfirmed!,
+                        // // Added 20230503 migration
+                        report: pin.report,
+                        report_detail: pin.reportDetail,
+                        report_location: pin.reportLocation)
         }
         return response
     }
@@ -73,7 +81,11 @@ struct PinTableController: RouteCollection
         let pin = Pin(
             userID: newPin.userID,
             confirmed: newPin.confirmed,
-            pinLocation: geoPT)
+            pinLocation: geoPT,
+            // Added 20230503 migration
+            report: newPin.report,
+            reportDetail: newPin.report_detail,
+            reportLocation: newPin.report_location)
         try await pin.save(on: req.db)
         return .ok
     }
