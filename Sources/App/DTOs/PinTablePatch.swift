@@ -15,6 +15,10 @@ struct PinTablePatch: Content
     var confirmed: Bool
     var longitude: Double
     var latitude: Double
+    // Added 20230503 migration
+    var report: String
+    var report_detail: String
+    var report_location: String
 }
 
 struct PinReturn: Content
@@ -26,4 +30,8 @@ struct PinReturn: Content
     var latitude: Double
     var time_created: Date
     var time_confirmed: Date
+    // Added 20230503 migration
+    var report: String
+    var report_detail: String
+    var report_location: String 
 }
