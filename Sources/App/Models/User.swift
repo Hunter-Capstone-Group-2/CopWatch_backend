@@ -37,6 +37,10 @@ final class User: Model, Content
     @Children(for: \.$userID) // Sets relation to pin table.
     var pins: [Pin]
     
+    // Added 20230505 migration
+    @Timestamp(key: "deleted_at", on: .delete)
+    var deletedAt: Date?
+    
     init() {}
     
     init(id: String? = nil, name: String, location: GeographicPoint2D)

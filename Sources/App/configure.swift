@@ -22,6 +22,7 @@ public func configure(_ app: Application) throws {
     app.migrations.add(CreateComment())
     app.migrations.add(ChangeDateToDatetime())
     app.migrations.add(AddWhatWhatDetailWhatLocation())
+    app.migrations.add(MakeUserSoftDeletable())
     
     try app.autoMigrate().wait()
 
