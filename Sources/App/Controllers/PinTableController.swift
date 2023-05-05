@@ -17,6 +17,7 @@ struct PinTableController: RouteCollection
         pin.get(":userID", ":distance", use: pinsAroundMe)
         pin.post(use: create)
         pin.put(":id", use: update)
+        pin.delete("deleteAll", use: deleteAll)
     }
     
     // GET // Returns all pins in db. BaseURL/pin
@@ -111,4 +112,11 @@ struct PinTableController: RouteCollection
         return .ok
         
     } // End update
+    
+    // DELETE // Deletes ALL pins in table. BaseURL/pin/deleteAll This will also clear the comment table.
+    func deleteAll(req: Request) async throws -> HTTPStatus
+    {
+        try await Pin.query(on: req.db).all().delete(on: req.db)
+        return .ok
+    }
 }
