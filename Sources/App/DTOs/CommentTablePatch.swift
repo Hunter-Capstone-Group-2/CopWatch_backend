@@ -13,6 +13,16 @@ struct CommentTablePatch: Content
     var pinID: UUID
     var userID: String
     var comment: String
+    
+    var like: Int
+    var dislike: Int
+}
+
+struct CommentTableEdit: Content
+{
+    var pinID: UUID
+    var userID: String
+    var comment: String
     var id: UUID
     var like: Int
     var dislike: Int

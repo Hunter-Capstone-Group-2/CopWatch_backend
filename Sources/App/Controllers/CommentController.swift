@@ -61,7 +61,7 @@ struct CommentTableController: RouteCollection
     // PUT // Edits existing comment. BaseURL/comment/
     func editComment(req: Request) async throws -> HTTPStatus
     {
-        let newComment = try req.content.decode(CommentTablePatch.self)
+        let newComment = try req.content.decode(CommentTableEdit.self)
         
         guard let dbCommentEntry = try await Comment.find(newComment.id, on: req.db)
         else
