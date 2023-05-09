@@ -7,6 +7,7 @@
 
 import Fluent
 import Vapor
+import Foundation
 import FluentPostGIS
 
 struct PinTableController: RouteCollection
@@ -14,7 +15,7 @@ struct PinTableController: RouteCollection
     func boot(routes: Vapor.RoutesBuilder) throws {
         let pin = routes.grouped("pin")
         pin.get(use: index)
-        pin.get(":userID", ":distance", use: pinsAroundMe)
+        pin.get(":userID", ":distance", ":minutes", use: pinsAroundMe)
         pin.post(use: create)
         pin.put(":id", use: update)
         pin.delete("deleteAll", use: deleteAll)
@@ -48,12 +49,15 @@ struct PinTableController: RouteCollection
     {
         let identifier = req.parameters.get("userID")!
         let radius = req.parameters.get("distance", as: Double.self) ?? 1000
-        
+        let age = req.parameters.get("minutes", as: Double.self) ?? 60
+        let cutoffTime = Date().addingTimeInterval(-(age * 60)) // Converts parameter to seconds
+        print(cutoffTime)
         let user = try await User.find(identifier, on: req.db)
         let userLoc = user!.location
             
         let pins =  try await Pin.query(on: req.db)
                 .filterGeographyDistanceWithin(\.$pinLocation, userLoc, radius)
+                .filter(\.$timeConfirmed, .greaterThanOrEqual, cutoffTime)
                 .all()
         let response = pins.map
         {
