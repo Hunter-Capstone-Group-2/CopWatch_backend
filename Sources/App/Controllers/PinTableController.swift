@@ -50,7 +50,7 @@ struct PinTableController: RouteCollection
         let identifier = req.parameters.get("userID")!
         let radius = req.parameters.get("distance", as: Double.self) ?? 1000
         let age = req.parameters.get("minutes", as: Double.self) ?? 60
-        let cutoffTime = Date().addingTimeInterval(-(age * 60))
+        let cutoffTime = Date().addingTimeInterval(-(age * 60)) // Converts parameter to seconds
         print(cutoffTime)
         let user = try await User.find(identifier, on: req.db)
         let userLoc = user!.location
