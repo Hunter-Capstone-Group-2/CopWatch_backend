@@ -19,15 +19,8 @@ struct UserTableController: RouteCollection
     }
     
     // POST // Creates new user and returns userID. BaseURL/user
-    func create(req: Request) async throws -> String
+    func create(req: Request) async throws -> HTTPStatus
     {
-        // Generate random id with uuid converted to base64 string
-        let uuid = UUID()
-        let idString = withUnsafeBytes(of: uuid.uuid) {Data($0)}
-        let encodedID = idString.base64EncodedString()
-        var editableID = encodedID
-        let badChars: Set<Character> = ["/", "="] // "/" interferes with URL and "==" is just for aesthetics.
-        editableID.removeAll(where: {badChars.contains($0)})
         
         let newUser = try req.content.decode(UserTablePatch.self)
         let geoPt = GeographicPoint2D(longitude: newUser.longitude, latitude: newUser.latitude)
@@ -41,12 +34,12 @@ struct UserTableController: RouteCollection
         
         
         let user = User(
-            id: editableID,
+            id: newUser.userID,
             name: newUser.user_name,
             location: geoPt)
             
             try await user.save(on: req.db)
-        return user.id ?? "Error. UserID not created."
+        return .ok 
     }
     
     // PUT // Updates user data (name or location). BaseURL/user
