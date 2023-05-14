@@ -17,6 +17,7 @@ struct CommentTableController: RouteCollection
         comment.get("byUser", ":userID", use: getUserPosts)
         comment.get("byPin", ":pinID", use: getPinPosts)
         comment.put(use: editComment)
+        comment.put("LikeDislike", use: changeLikeDislike)
         comment.delete(":id", use: delete)
     }
    
@@ -76,6 +77,35 @@ struct CommentTableController: RouteCollection
         try await dbCommentEntry.update(on: req.db)
         
         return .ok
+    }
+    
+    // PUT // Changes like / dislike value by +- 1. BaseURL/LikeDislike
+    func changeLikeDislike(req: Request) async throws -> Comment
+    {
+        // Error checks
+        let changeValues = try req.content.decode(CommentTableEdit.self)
+        guard let comment = try await Comment.find(changeValues.id, on: req.db)
+        else
+        {
+            throw Abort(.notFound)
+        }
+        // Like and Dislike can not both be incremented or decremented at the same time.
+        if ((changeValues.like == 1) && (changeValues.dislike == 1)) || ((changeValues.like == -1) && (changeValues.dislike == -1))
+        {
+            throw Abort(.conflict, reason: "Can't have two equal non-zero values.")
+        }
+        
+        // Add +- 1 to existing db value
+        let oldLike = comment.like ?? 0
+        let oldDislike = comment.dislike ?? 0
+        let newLike = oldLike + changeValues.like
+        let newDislike = oldDislike + changeValues.dislike
+    
+        comment.like = newLike
+        comment.dislike = newDislike
+        try await comment.update(on: req.db)
+        
+        return comment
     }
     
     // DELETE // Deletes comment based on comment id. BaseURL/comment/{id}
