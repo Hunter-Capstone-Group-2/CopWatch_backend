@@ -16,6 +16,7 @@ struct PinTableController: RouteCollection
         let pin = routes.grouped("pin")
         pin.get(use: index)
         pin.get(":userID", ":distance", ":minutes", use: pinsAroundMe)
+        pin.get("pinsCreatedbyUser", ":userID", use: myTotalPinCount)
         pin.post(use: create)
         pin.put(":id", use: update)
         pin.delete("deleteAll", use: deleteAll)
@@ -51,7 +52,7 @@ struct PinTableController: RouteCollection
         let radius = req.parameters.get("distance", as: Double.self) ?? 1000
         let age = req.parameters.get("minutes", as: Double.self) ?? 60
         let cutoffTime = Date().addingTimeInterval(-(age * 60)) // Converts parameter to seconds
-        print(cutoffTime)
+        
         let user = try await User.find(identifier, on: req.db)
         let userLoc = user!.location
             
@@ -70,12 +71,25 @@ struct PinTableController: RouteCollection
                         latitude: pin.pinLocation.latitude,
                         time_created: pin.timeCreateed!,
                         time_confirmed: pin.timeConfirmed!,
-                        // // Added 20230503 migration
+                        // Added 20230503 migration
                         report: pin.report,
                         report_detail: pin.reportDetail,
                         report_location: pin.reportLocation)
         }
         return response
+    }
+    
+    // GET // Returns number of pins created by user
+    func myTotalPinCount(req: Request) async throws -> Int
+    {
+        let identifier = req.parameters.get("userID")!
+        
+        let numberOfPins =  try await Pin.query(on: req.db)
+            .filter(\.$userID.$id == identifier)
+            .all()
+                
+        print(numberOfPins.count)
+        return numberOfPins.count
     }
     
     // POST // Creates pin. BaseURL/pin
