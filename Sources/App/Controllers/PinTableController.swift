@@ -16,7 +16,7 @@ struct PinTableController: RouteCollection
         let pin = routes.grouped("pin")
         pin.get(use: index)
         pin.get(":userID", ":distance", ":minutes", use: pinsAroundMe)
-        pin.get("pinsCreatedbyUser", ":userID", use: myTotalPinCount)
+        pin.get("UserPinCount", ":userID", use: myTotalPinCount)
         pin.post(use: create)
         pin.put(":id", use: update)
         pin.delete("deleteAll", use: deleteAll)
@@ -79,7 +79,7 @@ struct PinTableController: RouteCollection
         return response
     }
     
-    // GET // Returns number of pins created by user
+    // GET // Returns number of pins created by user. BaseURL/comment/pinsCreatedbyUser/{userID}
     func myTotalPinCount(req: Request) async throws -> Int
     {
         let identifier = req.parameters.get("userID")!

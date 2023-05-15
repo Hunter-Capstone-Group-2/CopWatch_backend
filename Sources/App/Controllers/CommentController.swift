@@ -16,6 +16,7 @@ struct CommentTableController: RouteCollection
         comment.post(use: create)
         comment.get("byUser", ":userID", use: getUserPosts)
         comment.get("byPin", ":pinID", use: getPinPosts)
+        comment.get("userCommentCount", ":userID", use: totalCommentsbyUser)
         comment.put(use: editComment)
         comment.put("LikeDislike", use: changeLikeDislike)
         comment.delete(":id", use: delete)
@@ -47,6 +48,18 @@ struct CommentTableController: RouteCollection
         return try await Comment.query(on: req.db)
                 .filter(\.$userID == identifier)
                 .all()
+    }
+    
+    // GET // Returns total comment count made by user. BaseURL/comment/totalCommentbyUser/{userID}
+    func totalCommentsbyUser(req: Request) async throws -> Int
+    {
+        let identifier = req.parameters.get("userID")!
+        
+        let commentCount =  try await Comment.query(on: req.db)
+                .filter(\.$userID == identifier)
+                .all()
+        
+        return commentCount.count
     }
     
     // GET // Returns comments for a specific pin. BaseURL/comment/byPin/{pinID}
