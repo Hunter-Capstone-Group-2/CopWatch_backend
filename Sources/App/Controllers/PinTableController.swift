@@ -88,7 +88,6 @@ struct PinTableController: RouteCollection
             .filter(\.$userID.$id == identifier)
             .all()
                 
-        print(numberOfPins.count)
         return numberOfPins.count
     }
     
