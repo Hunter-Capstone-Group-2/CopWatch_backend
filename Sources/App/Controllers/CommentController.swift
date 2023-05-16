@@ -7,6 +7,7 @@
 
 import Fluent
 import Vapor
+import FluentSQL
 
 struct CommentTableController: RouteCollection
 {
@@ -16,6 +17,8 @@ struct CommentTableController: RouteCollection
         comment.post(use: create)
         comment.get("byUser", ":userID", use: getUserPosts)
         comment.get("byPin", ":pinID", use: getPinPosts)
+        comment.get("UserCommentCount", ":userID", use: totalCommentsbyUser)
+        comment.get("TotalUserLikes", ":userID", use: totalUserLikes)
         comment.put(use: editComment)
         comment.put("LikeDislike", use: changeLikeDislike)
         comment.delete(":id", use: delete)
@@ -49,6 +52,18 @@ struct CommentTableController: RouteCollection
                 .all()
     }
     
+    // GET // Returns total comment count made by user. BaseURL/comment/UserCommentCount/{userID}
+    func totalCommentsbyUser(req: Request) async throws -> Int
+    {
+        let identifier = req.parameters.get("userID")!
+        
+        let commentCount =  try await Comment.query(on: req.db)
+                .filter(\.$userID == identifier)
+                .all()
+        
+        return commentCount.count
+    }
+    
     // GET // Returns comments for a specific pin. BaseURL/comment/byPin/{pinID}
     func getPinPosts(req: Request) async throws -> [Comment]
     {
@@ -57,6 +72,21 @@ struct CommentTableController: RouteCollection
         return try await Comment.query(on: req.db)
                 .filter(\.$pinID.$id == identifier)
                 .all()
+    }
+    
+    // GET // Returns sum of all likes received by user. BaseURL/comment/TotalUserLikes/{userID}
+    func totalUserLikes(req: Request) async throws -> Int
+    {
+        let identifier = req.parameters.get("userID")!
+        
+        let query = Comment.query(on: req.db)
+        
+        let totalLikes = try await query.filter(\.$userID == identifier)
+            .all()
+            .map{$0.like ?? 0}
+            .reduce(0, +)
+        
+        return totalLikes
     }
     
     // PUT // Edits existing comment. BaseURL/comment/
