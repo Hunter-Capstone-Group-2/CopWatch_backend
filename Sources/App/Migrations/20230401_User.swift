@@ -1,9 +1,15 @@
+//
+//  20230401_User.swift
+//  Create user table
+//
+//  Created by Raul Camargo on 4/1/23.
+//
 import Fluent
 
 struct CreateUser: AsyncMigration {
     func prepare(on database: Database) async throws
     {
-        // Create user table
+        
         try await database.schema("user")
             .field("user_id", .string, .identifier(auto: false))
             .field("user_name", .string, .required)

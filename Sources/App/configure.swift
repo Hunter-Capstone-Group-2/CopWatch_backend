@@ -16,6 +16,7 @@ public func configure(_ app: Application) throws {
                                                     )
     ), as: .psql)
 
+    // Table migrations
     app.migrations.add(EnablePostGISMigration())
     app.migrations.add(CreateUser())
     app.migrations.add(CreatePin())

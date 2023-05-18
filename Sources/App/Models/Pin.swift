@@ -12,6 +12,7 @@ import FluentPostGIS
 final class Pin: Model, Content
 {
     typealias IDValue = UUID
+    
     // Table name
     static let schema = "pin"
     

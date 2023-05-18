@@ -1,6 +1,6 @@
 //
 //  20230403_Pin.swift
-//  
+//  Create pin table
 //
 //  Created by Raul Camargo on 4/3/23.
 //
@@ -10,7 +10,7 @@ import Fluent
 struct CreatePin: AsyncMigration
 {
     func prepare(on database: Database) async throws {
-        // Create pin table
+        
         try await database.schema("pin")
             .id()
             .field("user_id", .string, .required, .references("user", "user_id", onDelete: .setNull))

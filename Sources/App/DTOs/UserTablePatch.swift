@@ -1,6 +1,6 @@
 //
 //  UserTablePatch.swift
-//  
+//  DTO to deal with differences in naming conventions between JSON and Swift
 //
 //  Created by Raul Camargo on 4/1/23.
 //

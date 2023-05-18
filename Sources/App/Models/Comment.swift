@@ -21,6 +21,7 @@ final class Comment: Model, Content
     
     @Parent(key: "pin_id")
     var pinID: Pin
+    
     // User relation will be foreign key.
     @Field(key: "user_id")
     var userID: String

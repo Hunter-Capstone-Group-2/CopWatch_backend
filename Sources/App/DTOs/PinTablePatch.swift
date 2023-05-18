@@ -1,7 +1,7 @@
 //
 //  PinTablePatch.swift
-//  
-//
+//  DTO to deal with differences in naming conventions between JSON and Swift
+//  and between PostGIS and Swift
 //  Created by Raul Camargo on 4/10/23.
 //
 
@@ -21,6 +21,7 @@ struct PinTablePatch: Content
     var report_location: String
 }
 
+// Patch for encoding the return data in a Swift friendly way
 struct PinReturn: Content
 {
     var id: UUID

@@ -1,6 +1,6 @@
 //
 //  20230505_User+SoftDelete.swift
-//  
+//  Allows for user to delete account without affecting child data (pins)
 //
 //  Created by Raul Camargo on 5/5/23.
 //

@@ -1,6 +1,6 @@
 //
 //  CommentController.swift
-//  
+//  Comment table routes
 //
 //  Created by Raul Camargo on 4/5/23.
 //
@@ -83,7 +83,7 @@ struct CommentTableController: RouteCollection
         
         let totalLikes = try await query.filter(\.$userID == identifier)
             .all()
-            .map{$0.like ?? 0}
+            .map{$0.like ?? 0} // maps query results to array and converts null to 0 so column can be summed
             .reduce(0, +)
         
         return totalLikes

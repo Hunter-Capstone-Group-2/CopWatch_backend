@@ -38,7 +38,7 @@ final class User: Model, Content
     var pins: [Pin]
     
     // Added 20230505 migration
-    @Timestamp(key: "deleted_at", on: .delete)
+    @Timestamp(key: "deleted_at", on: .delete) // Needed for soft-delete of user data
     var deletedAt: Date?
     
     init() {}

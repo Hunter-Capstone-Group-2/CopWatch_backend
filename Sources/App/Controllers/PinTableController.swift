@@ -1,6 +1,6 @@
 //
 //  PinTableController.swift
-//  
+//  Pin table routes
 //
 //  Created by Raul Camargo on 4/3/23.
 //
@@ -45,7 +45,7 @@ struct PinTableController: RouteCollection
         return response
     }
     
-    // GET // Returns all pins within distance specified. BaseURL/pin/{userID}/{distance}
+    // GET // Returns all pins within distance and time specified. BaseURL/pin/{userID}/{distance}/{minutes}
     func pinsAroundMe(req: Request) async throws -> [PinReturn]
     {
         let identifier = req.parameters.get("userID")!
@@ -128,9 +128,10 @@ struct PinTableController: RouteCollection
         
         return .ok
         
-    } // End update
+    }
     
     // DELETE // Deletes ALL pins in table. BaseURL/pin/deleteAll This will also clear the comment table.
+    // this is for testing purposes
     func deleteAll(req: Request) async throws -> HTTPStatus
     {
         try await Pin.query(on: req.db).all().delete(on: req.db)

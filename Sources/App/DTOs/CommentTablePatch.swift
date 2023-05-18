@@ -1,7 +1,7 @@
 //
 //  CommentTablePatch.swift
-//  
-//
+//  DTO to deal with differences in naming conventions between JSON and Swift
+//  DTO to account for differences in JSON payload between new comment and edited comment
 //  Created by Raul Camargo on 4/10/23.
 //
 

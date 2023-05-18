@@ -28,7 +28,7 @@ struct ChangeDateToDatetime: AsyncMigration
     {
         try await database.schema("pin")
             .updateField("time_created", .date) // revert column type back to .date
-            .updateField("time_confirmed", .date)
+            .updateField("time_confirmed", .date) // revert column type back to .date
             .update()
         
         try await database.schema("comment")

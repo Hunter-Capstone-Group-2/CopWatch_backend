@@ -1,7 +1,7 @@
 //
 //  20230503_Pin+What+DetailWhat+LocationDescription.swift
 //  
-//  Add What happened + Description + Location address/desc
+//  Add What happened + Description + Location address/desc from the app report page
 //
 //  Created by Raul Camargo on 5/3/23.
 //
